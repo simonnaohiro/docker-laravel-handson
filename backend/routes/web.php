@@ -19,7 +19,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// タスクのルート
 Route::get('/folders/{id}/tasks', [TaskController::class, 'index'])->name('tasks.index');
+Route::get('/folders/{id}/tasks/create', [TaskController::class, 'showCreateForm'])->name('tasks.create');
+Route::post('/folders/{id}/tasks/create' ,[TaskController::class, 'create']);
 
+// フォルダのルート
 Route::get('/folders/create', [FolderController::class, 'showCreateForm'])->name('folders.create');
 Route::post('/folders/create', [FolderController::class, 'create']);
+
