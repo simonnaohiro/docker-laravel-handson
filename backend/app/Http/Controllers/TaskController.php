@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\CreateTask;
+use App\Http\Requests\EditTask;
 use App\Models\Folder;
 use App\Models\Task;
+use Facade\Ignition\Tabs\Tab;
 
 class TaskController extends Controller
 {
@@ -47,6 +49,32 @@ class TaskController extends Controller
     
         return redirect()->route('tasks.index', [
             'id' => $current_folder->id,
+        ]);
+    }
+
+    public function showEditForm(int $id, int $task_id)
+    {
+        $task = Task::find($task_id);
+
+        return view('tasks/edit', [
+            'task' => $task,
+        ]);
+    }
+    
+    public function edit(int $id, int $task_id, EditTask $request)
+    {
+        // $task_idで指定したTaskをDBから検索し、$taskへ代入。インスタンスを作成する
+        $task = Task::find($task_id);
+
+        // 先に取得してきたタスクのインスタンスのタイトル、状態、期限日にフォームに入力した値を代入
+        $task->title = $request->title;
+        $task->status = $request->status;
+        $task->due_date = $request->due_date;
+        // 変更を保存（DB）
+        $task->save();
+
+        return redirect()->route('tasks.index', [
+            'id' => $task->folder_id,
         ]);
     }
 }
