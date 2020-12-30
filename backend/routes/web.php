@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\FolderController;
+use App\Http\Controllers\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,9 +16,11 @@ use App\Http\Controllers\FolderController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// 認証機能のルート
+Auth::routes();
+
+// Home画面のルート
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // タスクのルート
 Route::get('/folders/{id}/tasks', [TaskController::class, 'index'])->name('tasks.index');
@@ -32,3 +35,7 @@ Route::post('/folders/{id}/tasks/{task_id}/edit', [TaskController::class, 'edit'
 Route::get('/folders/create', [FolderController::class, 'showCreateForm'])->name('folders.create');
 Route::post('/folders/create', [FolderController::class, 'create']);
 
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
